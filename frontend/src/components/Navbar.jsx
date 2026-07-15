@@ -10,8 +10,8 @@ const Navbar = (props) => {
                     <h1>Flash<span>View</span></h1>
                 </div>
                 <div className="btn-container">
-                    <Link to="/register" className='btn-login'> Entrar</Link>
-                    <Link to="/register" className='btn-register'> Cadastrar </Link>
+                    <Link to="/" className='btn-login'> Entrar</Link>
+                    <Link to="/Cadastro" className='btn-register'> Cadastrar </Link>
                 </div>
             </nav>
         </>

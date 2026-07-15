@@ -1,4 +1,5 @@
 import { useState } from "react"; // O hook useState é a função que permite um componente "guardar" e atualizar dados que, quando mudam, fazem a tela renderizar sozinha.
+import { Link } from 'react-router-dom';
 import '../Cadastro/Cadastro.css';
 
 
@@ -80,7 +81,7 @@ const Cadastro = () => {
                 />
 
                  <div className="forgot-password">
-                    <a href="#">Esqueceu a senha?</a>
+                    <Link to ="/EsqueceuSenha">Esqueceu a senha?</Link> {/* O Link ja está funcional. */}
                 </div>
 
                 <button type="submit" className="btn-submit">

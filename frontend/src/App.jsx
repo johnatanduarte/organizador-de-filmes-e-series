@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import { Routes, Route} from 'react-router-dom';
 import Cadastro from './pages/Cadastro/Cadastro.jsx';
 import Navbar from "./components/Navbar";
-import './App.css'
+import './App.css';
+import EsqueceuSenha from "./pages/esqueceuSenha/EsqueceuSenha";
 
 
 function App() {
@@ -12,14 +13,13 @@ function App() {
       <Navbar/>
 
       <Routes>
-        <Route  path="/Cadastro " element={<Cadastro />} />
+        <Route  path='/Cadastro' element={<Cadastro />} />
+        <Route path='/EsqueceuSenha'  element = {<EsqueceuSenha/>}/>
       </Routes>
 
-      <Cadastro>
 
-      </Cadastro>
     </>
   )
 }
 
-export default App
+export default App;
