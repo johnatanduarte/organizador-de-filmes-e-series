@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+// Adicionado o 'useNavigate' no import do react-router-dom
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar.jsx"; // Importando o Navbar
 import "./EsqueceuSenha.css";
 
 export default function EsqueceuSenha() {
   const [contato, setContato] = useState("");
   const [codigo, setCodigo] = useState("");
   const [etapa, setEtapa] = useState(1); // 1 = Digitar e-mail/telefone, 2 = Digitar código
+  const navigate = useNavigate();
 
   const handleProcurar = (e) => {
     e.preventDefault();
@@ -19,8 +22,15 @@ export default function EsqueceuSenha() {
     console.log("Código enviado:", codigo);
   };
 
+  const handleVoltar = () => {
+    navigate("/"); // Navega de volta para a rota principal de Login
+  };
+
   return (
     <>
+      {/* Adicionado o Navbar no topo */}
+      <Navbar />
+
       <div className="esqueceu-senha-page">
         {/* CONTEÚDO PRINCIPAL */}
         <main className="main-content">
@@ -40,12 +50,17 @@ export default function EsqueceuSenha() {
                     value={contato}
                     onChange={(e) => setContato(e.target.value)}
                     className="input-field"
+                    required
                   />
                 </div>
 
                 <div className="actions-row space-between">
-                  {/* Botão voltar (depois vocês configuram a rota com React Router) */}
-                  <button type="button" className="btn-solid btn-small">
+                  {/* Conectado o evento onClick ao handleVoltar */}
+                  <button
+                    type="button"
+                    className="btn-solid btn-small"
+                    onClick={handleVoltar}
+                  >
                     Voltar
                   </button>
                   <button type="submit" className="btn-solid btn-small">
@@ -71,6 +86,7 @@ export default function EsqueceuSenha() {
                     value={codigo}
                     onChange={(e) => setCodigo(e.target.value)}
                     className="input-field"
+                    required
                   />
                 </div>
 
@@ -82,7 +98,7 @@ export default function EsqueceuSenha() {
 
                 <p className="footer-text">
                   Já Possui Uma Conta?{" "}
-                  <Link to="/" className="link-highlight"> {/* Trocado <a> por <Link> e href por to */}
+                  <Link to="/" className="link-highlight">
                     Login
                   </Link>
                 </p>

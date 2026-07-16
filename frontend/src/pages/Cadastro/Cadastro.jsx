@@ -1,6 +1,6 @@
-import { useState } from "react"; 
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar.jsx"; // <-- Navbar importado aqui
+import Navbar from "../../components/Navbar/Navbar.jsx";
 import "./Cadastro.css"; // Ajustado o caminho do CSS para a mesma pasta
 
 const Cadastro = () => {
@@ -12,16 +12,16 @@ const Cadastro = () => {
   });
 
   function handleChange(e) {
-    const { name, value } = e.target; 
-    setFormData({ ...formData, [name]: value }); 
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   }
 
   function handleSubmit(e) {
-    e.preventDefault(); 
+    e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
       alert("As senhas não coincidem!");
-      return; 
+      return;
     } else {
       alert("O formulário foi enviado com sucesso!");
     }
@@ -42,9 +42,9 @@ const Cadastro = () => {
           <label>Nome Completo</label>
           <input
             type="text"
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             required
           />
 
@@ -84,7 +84,6 @@ const Cadastro = () => {
           </button>
 
           <div className="login-redirect">
-            {/* Trocado o <a> pelo <Link> do react-router-dom */}
             Já Possui Uma Conta? <Link to="/">Login</Link>
           </div>
         </form>

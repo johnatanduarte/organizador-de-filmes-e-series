@@ -61,22 +61,6 @@
     border-color: var(--color-secondary);
 }
 
-.forgot-password {
-    text-align: right;
-    margin-bottom: 1.5rem;
-}
-
-.forgot-password a {
-    text-decoration: none;
-    color: var(--color-secondary);
-    font-size: 13px;
-    cursor : pointer;
-    transition: 0.3s ease;
-}
-
-.forgot-password a:hover {
-    opacity: 0.9;
-}
 
 .btn-submit {
     width: 100%;
@@ -111,4 +95,5 @@
 
 .login-redirect a:hover {
     opacity: 0.9;
+    text-decoration: underline;
 }

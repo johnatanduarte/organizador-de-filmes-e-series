@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
-import Icon from "../assets/flashview_simbolo.svg";
+import Icon from "../../assets/flashview_simbolo.svg";
+import '../Navbar/Navbar.css';
+
 const Navbar = (props) => {
 
     return (
