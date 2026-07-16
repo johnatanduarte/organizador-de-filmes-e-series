@@ -10,6 +10,7 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/Cadastro" element={<Cadastro />} />
         <Route path="/EsqueceuSenha" element={<EsqueceuSenha />} />
         <Route path="/Inicio" element={<Inicio />} />
