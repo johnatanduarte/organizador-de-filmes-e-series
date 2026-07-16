@@ -74,11 +74,7 @@ const Cadastro = () => {
             onChange={handleChange}
             required
           />
-
-          <div className="forgot-password">
-            <Link to="/EsqueceuSenha">Esqueceu a senha?</Link>
-          </div>
-
+          
           <button type="submit" className="btn-submit">
             Cadastrar
           </button>
