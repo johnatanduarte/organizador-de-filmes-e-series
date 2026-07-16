@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {useNavigate} from 'react-router-dom';
 import "./EsqueceuSenha.css";
 import flashview from "../../assets/flashview.png";
 
@@ -6,6 +7,7 @@ export default function EsqueceuSenha() {
   const [contato, setContato] = useState("");
   const [codigo, setCodigo] = useState("");
   const [etapa, setEtapa] = useState(1); // 1 = Digitar e-mail/telefone, 2 = Digitar código
+  const navigate = useNavigate();
 
   const handleProcurar = (e) => {
     e.preventDefault();
@@ -18,26 +20,16 @@ export default function EsqueceuSenha() {
     // Simula o envio do código validado
     console.log("Código enviado:", codigo);
   };
+  
+    const handleVoltar = () => {
+      navigate('/');
+    };
+
+  
 
   return (
       <>
     <div className="esqueceu-senha-page">
-
-      {/*} //CABEÇALHO (Header) 
-      <header className="navbar">
-        <div className="logo-container">
-           Coloque o caminho da sua imagem do raio aqui no src 
-          <img src={flashview} alt="Raio Logo" className="logo-icon" />
-          <h1 className="logo-text">
-            Flash<span className="text-highlight">View</span>
-          </h1>
-        </div>
-        <div className="navbar-actions">
-          <button className="btn-outline">Entrar</button>
-          <button className="btn-solid">Cadastrar</button>
-        </div>
-      </header> /*} 
-      
 
       {/* CONTEÚDO PRINCIPAL */}
       <main className="main-content">
@@ -57,12 +49,13 @@ export default function EsqueceuSenha() {
                   value={contato}
                   onChange={(e) => setContato(e.target.value)}
                   className="input-field"
+                  required
                 />
               </div>
 
               <div className="actions-row space-between">
                 {/* Botão voltar (depois vocês configuram a rota com React Router) */}
-                <button type="button" className="btn-solid btn-small">
+                <button type="button" className="btn-solid btn-small" onClick={handleVoltar}>
                   Voltar
                 </button>
                 <button type="submit" className="btn-solid btn-small">

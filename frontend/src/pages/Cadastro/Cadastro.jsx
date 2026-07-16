@@ -80,16 +80,12 @@ const Cadastro = () => {
                     required
                 />
 
-                 <div className="forgot-password">
-                    <Link to ="/EsqueceuSenha">Esqueceu a senha?</Link> {/* O Link ja está funcional. */}
-                </div>
-
                 <button type="submit" className="btn-submit">
                     Cadastrar
                 </button>
 
                 <div className="login-redirect">
-                    Já Possui Uma Conta? <a href="#">Login</a>
+                    Já Possui Uma Conta? <Link to = "/">Login</Link>
                 </div>
 
                </form>
