@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./EsqueceuSenha.css";
-import flashview from "../../assets/flashview.png";
 
 export default function EsqueceuSenha() {
   const [contato, setContato] = useState("");
@@ -20,94 +20,77 @@ export default function EsqueceuSenha() {
   };
 
   return (
-      <>
-    <div className="esqueceu-senha-page">
+    <>
+      <div className="esqueceu-senha-page">
+        {/* CONTEÚDO PRINCIPAL */}
+        <main className="main-content">
+          <div className="card">
+            <h2 className="card-title">Esqueceu a Senha</h2>
 
-      {/*} //CABEÇALHO (Header) 
-      <header className="navbar">
-        <div className="logo-container">
-           Coloque o caminho da sua imagem do raio aqui no src 
-          <img src={flashview} alt="Raio Logo" className="logo-icon" />
-          <h1 className="logo-text">
-            Flash<span className="text-highlight">View</span>
-          </h1>
-        </div>
-        <div className="navbar-actions">
-          <button className="btn-outline">Entrar</button>
-          <button className="btn-solid">Cadastrar</button>
-        </div>
-      </header> /*} 
-      
-
-      {/* CONTEÚDO PRINCIPAL */}
-      <main className="main-content">
-        <div className="card">
-          <h2 className="card-title">Esqueceu a Senha</h2>
-
-          {etapa === 1 ? (
-            /* =========================================
+            {etapa === 1 ? (
+              /* =========================================
                ETAPA 1: SOLICITAR E-MAIL / TELEFONE
                ========================================= */
-            <form onSubmit={handleProcurar} className="form-container">
-              <div className="input-group">
-                <label htmlFor="contato">E-mail/ Telefone</label>
-                <input
-                  type="text"
-                  id="contato"
-                  value={contato}
-                  onChange={(e) => setContato(e.target.value)}
-                  className="input-field"
-                />
-              </div>
+              <form onSubmit={handleProcurar} className="form-container">
+                <div className="input-group">
+                  <label htmlFor="contato">E-mail/ Telefone</label>
+                  <input
+                    type="text"
+                    id="contato"
+                    value={contato}
+                    onChange={(e) => setContato(e.target.value)}
+                    className="input-field"
+                  />
+                </div>
 
-              <div className="actions-row space-between">
-                {/* Botão voltar (depois vocês configuram a rota com React Router) */}
-                <button type="button" className="btn-solid btn-small">
-                  Voltar
-                </button>
-                <button type="submit" className="btn-solid btn-small">
-                  Procurar
-                </button>
-              </div>
-            </form>
-          ) : (
-            /* =========================================
+                <div className="actions-row space-between">
+                  {/* Botão voltar (depois vocês configuram a rota com React Router) */}
+                  <button type="button" className="btn-solid btn-small">
+                    Voltar
+                  </button>
+                  <button type="submit" className="btn-solid btn-small">
+                    Procurar
+                  </button>
+                </div>
+              </form>
+            ) : (
+              /* =========================================
                ETAPA 2: DIGITAR CÓDIGO RECEBIDO
                ========================================= */
-            <form onSubmit={handleEnviar} className="form-container">
-              <p className="instruction-text">
-                Informe o codígo enviado
-                <br />
-                por e-mail/sms
-              </p>
+              <form onSubmit={handleEnviar} className="form-container">
+                <p className="instruction-text">
+                  Informe o codígo enviado
+                  <br />
+                  por e-mail/sms
+                </p>
 
-              <div className="input-group">
-                <input
-                  type="text"
-                  id="codigo"
-                  value={codigo}
-                  onChange={(e) => setCodigo(e.target.value)}
-                  className="input-field"
-                />
-              </div>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    id="codigo"
+                    value={codigo}
+                    onChange={(e) => setCodigo(e.target.value)}
+                    className="input-field"
+                  />
+                </div>
 
-              <div className="actions-row center">
-                <button type="submit" className="btn-solid btn-medium">
-                  Enviar
-                </button>
-              </div>
+                <div className="actions-row center">
+                  <button type="submit" className="btn-solid btn-medium">
+                    Enviar
+                  </button>
+                </div>
 
-              <p className="footer-text">
-                Já Possui Uma Conta?{" "}
-                <a href="/login" className="link-highlight">
-                  Login
-                </a>
-              </p>
-            </form>
-          )}
-        </div>
-      </main>
-    </div>
+                <p className="footer-text">
+                  Já Possui Uma Conta?{" "}
+                  <Link to="/" className="link-highlight"> {/* Trocado <a> por <Link> e href por to */}
+                    Login
+                  </Link>
+                </p>
+              </form>
+            )}
+          </div>
+        </main>
+      </div>
     </>
   );
 }
