@@ -13,7 +13,6 @@ function App() {
     <>
       {/* O Navbar fica fora do <Routes> para aparecer em todas as páginas */}
       <Navbar/>
-
       {/* O <main> ajuda a centralizar o conteúdo da página */}
       <main className="page-container">
       <Routes>
