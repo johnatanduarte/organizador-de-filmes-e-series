@@ -6,7 +6,8 @@
   background-color: #121319; /* Fundo principal */
   min-height: 100vh;
   color: #fff;
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Kay Pho Du ";
+  font-weight: 700;
 }
 
 /* O margin-left afasta o conteúdo do menu lateral fixo (250px) */
