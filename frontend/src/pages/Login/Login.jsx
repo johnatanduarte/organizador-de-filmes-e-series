@@ -1,37 +1,62 @@
-import React from "react";
-import "./Login.css"; 
-import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar.jsx"; 
+import React, { useState } from "react";
+import "./Login.css";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/Navbar.jsx";
 
 function Login() {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  // Trocado de 'username' para 'email' para bater com o banco de dados
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
 
-    if (!username || !password) {
-      setError("Por favor, preencha o usuário e a senha.");
+    if (!email || !password) {
+      setError("Por favor, preencha o e-mail e a senha.");
       return;
     }
 
     setIsLoading(true);
-    setTimeout(() => {
-      alert(`Olá, ${username}! Login efetuado com sucesso!`);
+
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.erro || "Falha ao fazer login.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Sucesso! Salva o ID do usuário no navegador para usarmos nas outras telas
+      localStorage.setItem("usuarioId", data.usuarioId);
+
+      // Redireciona para o Início (ou para o Catálogo/Minha Lista, dependendo das suas rotas)
+      navigate("/inicio");
+    } catch (error) {
+      console.error("Erro ao conectar com o servidor:", error);
+      setError("Não foi possível conectar ao servidor.");
       setIsLoading(false);
-    }, 1200);
+    }
   };
 
   return (
     <>
-      <Navbar /> {/* Mantendo o padrão das telas de autenticação */}
-      {/* Classes alteradas para string (padrão global) */}
+      <Navbar />
       <div className="loginPage">
         <div className="loginCard">
-          {/* Logo Centralizada interna */}
           <div className="cardLogo">
             <div className="rayIcon">
               <svg viewBox="0 0 24 24" fill="currentColor">
@@ -47,13 +72,13 @@ function Login() {
 
           <form onSubmit={handleSubmit} className="form">
             <div className="inputBox">
-              <label htmlFor="username">Login</label>
+              <label htmlFor="email">E-mail</label>
               <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                autoComplete="username"
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
               />
             </div>
 
@@ -67,7 +92,6 @@ function Login() {
                 autoComplete="current-password"
               />
               <div className="forgotContainer">
-                {/* Removi um espaço em branco que estava sobrando no link */}
                 <Link to="/EsqueceuSenha" className="forgotLink">
                   Esqueceu a senha?
                 </Link>
