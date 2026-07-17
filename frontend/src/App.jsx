@@ -1,31 +1,32 @@
-import { useState } from 'react';
 import { Routes, Route} from 'react-router-dom';
 import Cadastro from './pages/Cadastro/Cadastro.jsx';
 import Navbar from "./components/Navbar";
 import './App.css';
 import EsqueceuSenha from "./pages/esqueceuSenha/EsqueceuSenha";
-import login from "./pages/Login/telalogin.jsx";
-import Login from "./pages/Login/telalogin.jsx"; // 1. Renomeado para PascalCase
+import Login from "./pages/Login/telalogin.jsx";
+import MinhaLista from './pages/MinhaLista/MinhaLista.jsx';
 
 
 function App() {
 
   return (
     <>
-      {/* O Navbar fica fora do <Routes> para aparecer em todas as páginas */}
-      <Navbar/>
-      <login/>
-      {/* O <main> ajuda a centralizar o conteúdo da página */}
-      <main className="page-container">
+      {/* 
+        O Navbar pode ficar fora do <Routes> para aparecer em todas as páginas,
+        mas a página MinhaLista já tem sua própria sidebar, então o Navbar global
+        foi removido para este exemplo. Você pode ajustar conforme a necessidade.
+      */}
+      {/* <Navbar/> */}
+      
       <Routes>
-        {/* 2. Adicionada a rota para a página de Login */}
+        {/* As rotas definem qual componente renderizar para cada URL */}
         <Route  path='/' element={<Login />} /> 
         <Route  path='/Cadastro' element={<Cadastro />} />
         <Route path='/EsqueceuSenha'  element = {<EsqueceuSenha/>}/>
+        <Route path="/minha-lista" element={<MinhaLista />} />
       </Routes>
 
 
-      </main>
     </>
   )
 }

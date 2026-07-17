@@ -1,6 +1,6 @@
 import { useState } from "react"; // O hook useState é a função que permite um componente "guardar" e atualizar dados que, quando mudam, fazem a tela renderizar sozinha.
 import { Link } from 'react-router-dom';
-import '../Cadastro/Cadastro.css';
+import './Cadastro.css';
 
 
 const Cadastro = () => {
