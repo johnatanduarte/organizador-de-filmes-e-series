@@ -8,113 +8,99 @@ import PosterFilme from "../../components/PosterFilme";
 import InformacoesFilme from "../../components/InformacoesFilme";
 import SinopseFilme from "../../components/SinopseFilme";
 import { adicionarNaLista, estaNaLista } from "../../utils/minhaLista";
+import { removerDaLista } from "../../utils/minhaLista";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const IMG_BASE = "https://image.tmdb.org/t/p/w300";
 
 function DetalhesFilme() {
+  const { id } = useParams();
 
-    const { id } = useParams();
+  const [filme, setFilme] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(null);
+  const [naLista, setNaLista] = useState(false); // novo state
 
-    const [filme, setFilme] = useState(null);
-    const [carregando, setCarregando] = useState(true);
-    const [erro, setErro] = useState(null);
-    const [naLista, setNaLista] = useState(false); // novo state
+  useEffect(() => {
+    async function carregarFilme() {
+      try {
+        setCarregando(true);
 
-    useEffect(() => {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=pt-BR`,
+        );
 
-        async function carregarFilme() {
-
-            try {
-
-                setCarregando(true);
-
-                const response = await fetch(
-                    `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=pt-BR`
-                );
-
-                if (!response.ok) {
-                    throw new Error("Erro ao carregar filme.");
-                }
-
-                const data = await response.json();
-
-                setFilme(data);
-                setNaLista(estaNaLista(data.id)); // checa assim que o filme carrega
-
-            } catch (err) {
-
-                setErro(err.message);
-
-            } finally {
-
-                setCarregando(false);
-
-            }
-
+        if (!response.ok) {
+          throw new Error("Erro ao carregar filme.");
         }
 
-        carregarFilme();
+        const data = await response.json();
 
-    }, [id]);
-
-    function handleAdicionarMinhaLista() {
-        const adicionado = adicionarNaLista({
-            id: filme.id,
-            title: filme.title,
-            poster_path: filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null,
-            release_date: filme.release_date,
-            genre_ids: filme.genres ? filme.genres.map((g) => g.id) : [],
-        });
-
-        if (adicionado) {
-            setNaLista(true); // atualiza o botão na hora, sem precisar recarregar
-        }
+        setFilme(data);
+        setNaLista(estaNaLista(data.id)); // checa assim que o filme carrega
+      } catch (err) {
+        setErro(err.message);
+      } finally {
+        setCarregando(false);
+      }
     }
 
-    if (carregando) {
-        return <h2>Carregando...</h2>;
+    carregarFilme();
+  }, [id]);
+
+  function handleToggleMinhaLista() {
+    if (naLista) {
+      removerDaLista(filme.id);
+      setNaLista(false);
+    } else {
+      adicionarNaLista({
+        id: filme.id,
+        title: filme.title,
+        poster_path: filme.poster_path
+          ? `${IMG_BASE}${filme.poster_path}`
+          : null,
+        release_date: filme.release_date,
+        genre_ids: filme.genres ? filme.genres.map((g) => g.id) : [],
+      });
+      setNaLista(true);
     }
+  }
 
-    if (erro) {
-        return <h2>{erro}</h2>;
-    }
+  if (carregando) {
+    return <h2>Carregando...</h2>;
+  }
 
-    return (
+  if (erro) {
+    return <h2>{erro}</h2>;
+  }
 
-        <main className="detalhes-page">
+  return (
+    <main className="detalhes-page">
+      <BannerFilme backdrop={filme.backdrop_path} />
 
-            <BannerFilme backdrop={filme.backdrop_path} />
+      <div className="detalhes-container">
+        <PosterFilme poster={filme.poster_path} titulo={filme.title} />
 
-            <div className="detalhes-container">
+        <InformacoesFilme filme={filme} />
+      </div>
+      <div className="btn-detail">
+        <Link to="/Catalogo" className="btn-voltar ">
+          Voltar
+        </Link>
 
-                <PosterFilme
-                    poster={filme.poster_path}
-                    titulo={filme.title}
-                />
+        <button
+          className={naLista ? "btn-na-lista" : "btn-adicionar-lista"}
+          onClick={handleToggleMinhaLista}
+        >
+          {naLista
+            ? "✓ Na sua Lista (clique para remover)"
+            : "+ Adicionar à Minha Lista"}
+        </button>
+      </div>
 
-                <InformacoesFilme filme={filme} />
-
-            </div>
-            <div className="btn-detail">
-                <Link to ="/Catalogo" className="btn-voltar ">Voltar</Link>
-
-                <button
-                    className={naLista ? "btn-na-lista" : "btn-adicionar-lista"}
-                    onClick={handleAdicionarMinhaLista}
-                    disabled={naLista}
-                >
-                    {naLista ? "Já está na sua Lista" : "+ Adicionar à Minha Lista"}
-                </button>
-            </div>
-
-            <SinopseFilme overview={filme.overview} />
-        
-
-        </main>
-
-    );
-
+      <SinopseFilme overview={filme.overview} />
+    </main>
+  );
 }
 
 export default DetalhesFilme;
