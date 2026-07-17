@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./MovieCard.module.css";
+import { adicionarNaLista, removerDaLista } from "../utils/minhaLista";
 
 export default function MovieCard({
   id,
@@ -14,41 +15,23 @@ export default function MovieCard({
 
   const navigate = useNavigate();
 
-  function adicionarMinhaLista(e) {
+  function handleAdicionar(e) {
     e.stopPropagation();
 
-    const lista = JSON.parse(localStorage.getItem("minhaLista")) || [];
-
-    const filmeExiste = lista.some((filme) => filme.id === id);
-
-
-    if (filmeExiste) {
-      alert("Esse filme já está na sua lista!");
-      return;
-    }
-
-    lista.push({
+    adicionarNaLista({
       id,
       title: titulo,
       poster_path: poster,
       release_date: subtitulo,
       genre_ids,
     });
-
-    localStorage.setItem("minhaLista", JSON.stringify(lista));
-
-    alert("Filme adicionado!");
   }
 
-  function removerDaLista(e) {
-  e.stopPropagation();
-
-  const lista = JSON.parse(localStorage.getItem("minhaLista")) || [];
-
-  const novaLista = lista.filter((filme) => filme.id !== id);
-
-  localStorage.setItem("minhaLista", JSON.stringify(novaLista));
-}
+  function handleRemover(e) {
+    e.stopPropagation();
+    removerDaLista(id);
+    onRemover?.(id);
+  }
 
   return (
     <div
@@ -67,26 +50,17 @@ export default function MovieCard({
             : undefined
         }
       >
-       {mostrarBotaoAdd && (
-    <button
-        className={styles.addBtn}
-        onClick={adicionarMinhaLista}
-    >
-        +
-    </button>
-)}
+        {mostrarBotaoAdd && (
+          <button className={styles.addBtn} onClick={handleAdicionar}>
+            +
+          </button>
+        )}
 
-{mostrarBotaoRemover && (
-    <button
-        className={styles.removeBtn}
-        onClick={(e) => {
-            e.stopPropagation();
-            onRemover(id);
-        }}
-    >
-        x
-    </button>
-)}
+        {mostrarBotaoRemover && (
+          <button className={styles.removeBtn} onClick={handleRemover}>
+            x
+          </button>
+        )}
       </div>
 
       <p>{titulo}</p>
