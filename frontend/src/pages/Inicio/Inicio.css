@@ -1,0 +1,241 @@
+/* =======================================
+   LAYOUT GERAL DA TELA
+   ======================================= */
+.layout-container {
+  display: flex;
+  background-color: #121319; /* Fundo principal */
+  min-height: 100vh;
+  color: #fff;
+  font-family: "Kay Pho Du ";
+  font-weight: 700;
+}
+
+/* O margin-left afasta o conteúdo do menu lateral fixo (250px) */
+.inicio-content {
+  margin-left: 250px;
+  padding: 2rem 4rem;
+  flex: 1;
+  max-width: 1200px; /* Evita que estique infinitamente em telas ultra-wide */
+}
+
+/* =======================================
+   BARRA DE PESQUISA
+   ======================================= */
+.inicio-header {
+  margin-bottom: 3rem;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #191a23;
+  border-radius: 8px;
+  padding: 10px 15px;
+  width: 300px;
+  gap: 10px;
+  border: 1px solid #292a36;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+/* =======================================
+   SAUDAÇÃO E ESTATÍSTICAS
+   ======================================= */
+.welcome-section h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.welcome-section p {
+  color: #a1a1aa;
+  margin-top: 5px;
+  margin-bottom: 2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background-color: #222431;
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-card h2 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.stat-card span {
+  color: #a1a1aa;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.text-orange {
+  color: #f79c1e;
+}
+.text-cyan {
+  color: #2ab8a1;
+}
+.text-white {
+  color: #ffffff;
+}
+
+/* =======================================
+   SEÇÕES GENÉRICAS E TÍTULOS
+   ======================================= */
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.link-cyan {
+  color: #2ab8a1;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+/* =======================================
+   CARDS DAS SÉRIES EM ANDAMENTO
+   ======================================= */
+.series-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.series-card {
+  background-color: #222431;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.series-image-placeholder {
+  width: 100%;
+  height: 140px;
+  background-color: #292a36; /* Cor do espaço onde a imagem ficará */
+}
+
+.series-info {
+  padding: 1rem;
+}
+
+.series-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+}
+
+.series-info p {
+  margin: 0 0 1rem 0;
+  color: #a1a1aa;
+  font-size: 0.85rem;
+}
+
+.btn-mark {
+  width: 100%;
+  padding: 8px;
+  background-color: #f79c1e;
+  border: none;
+  border-radius: 6px;
+  color: #000;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.btn-done {
+  background-color: #f79c1e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =======================================
+   CARDS DE FILMES POPULARES
+   ======================================= */
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+
+.movie-item p {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+  margin-top: 10px;
+}
+
+.movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3; /* Proporção padrão de poster de cinema */
+  background-color: #222431;
+  border-radius: 8px;
+  position: relative;
+}
+
+.add-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f79c1e;
+  border: none;
+  border-radius: 4px;
+  color: #000;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =======================================
+   CATEGORIAS (PILLS)
+   ======================================= */
+.categories-list {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.category-pill {
+  background-color: #222431;
+  color: #a1a1aa;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.category-pill:hover {
+  background-color: #292a36;
+  color: #fff;
+}

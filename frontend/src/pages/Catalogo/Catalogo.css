@@ -1,0 +1,147 @@
+:root {
+  --color-primary: #FF9F1C;
+    --color-secondary: #2EC5B6;
+    --color-bg-dark: #181820;
+    --color-bg-card: #252837;
+    --color-text: #FFFFFF;
+    --color-text-muted: #9C9CAE;
+    --font-primary: "Kay Pho Du", serif;
+    --color-border: #2E313F;
+}
+
+.catalogo-content {
+    margin-left: 250px;
+    padding: 2rem 4rem;
+    flex: 1;
+    max-width: 1200px;
+    font-family: "Kay Pho Du";
+}
+
+
+.catalogo-header {
+  margin-bottom: 2rem;
+}
+
+.catalogo-header h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.catalogo-header p {
+    color: var(--color-text-muted);
+    margin-top: 5px;
+}
+
+.filtros-bar {
+    margin-bottom: 1.5rem;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+     background-color: var(--color-bg-dark);
+    border-radius: 8px;
+    padding: 10px 15px;
+    width: 100%;
+    max-width: 500px;
+    gap: 10px;
+    border: 1px solid var(--color-border);
+}
+
+.search-bar input {
+  background: transparent;
+  color:  var(--color-text);
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+.categories-list {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.category-pill {
+  background-color: var(--color-bg-card);
+  color: var(--color-text-muted);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.category-pill:hover {
+  background-color: #292a36;
+  color: var(--color-text);
+}
+
+.category-pill.active {
+  background-color: var(--color-primary);
+  color: var(--color-bg-dark);
+  font-weight: bold;
+}
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+
+.movie-item p {
+  font-size: 0.85rem;
+  color: #fff;
+  margin-top: 10px;
+}
+
+.movie-subtitulo {
+  display: block;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  margin-top: 2px;
+}
+
+.movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background-color: #222431;
+  border-radius: 8px;
+  position: relative;
+}
+
+.add-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f79c1e;
+  border: none;
+  border-radius: 4px;
+  color: #000;
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-msg {
+  color: #a1a1aa;
+  text-align: center;
+  padding: 2rem;
+}
+
+.tmdb-attribution {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #292a36;
+}
+
+.tmdb-attribution p {
+  color: #6b6b76;
+  font-size: 0.75rem;
+  text-align: center;
+}
