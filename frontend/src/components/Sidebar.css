@@ -1,110 +1,97 @@
 .sidebar {
-  width: 250px;
-  height: 100vh;
-  background-color: #191a23;
+  width: 240px;
+  min-width: 240px; /* Garante que a sidebar não encolha */
+  height: 100vh; /* Ocupa a altura inteira da tela */
+  background-color: #1a1a22;
+  border-right: 1px solid #252530;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 2rem 0;
-  position: fixed;
+  justify-content: space-between; /* Empurra o perfil para o rodapé */
+
+  position: sticky; /* Deixa o menu fixo na rolagem */
   top: 0;
-  left: 0;
-  border-right: 1px solid #292a36;
-  font-family: "Courier New", Courier, monospace;
+  z-index: 10; /* Garante que a sidebar fique na frente de outros conteúdos */
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 2rem;
-  margin-bottom: 3rem;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
 }
 
 .sidebar-logo h2 {
-  color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
   margin: 0;
 }
 
 .sidebar-logo span {
-  color: #2ab8a1;
+  color: #ffa500;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0 1rem;
+  gap: 1rem;
 }
 
 .nav-item {
+  color: #8e8e9f;
+  text-decoration: none;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  transition: 0.2s;
   display: flex;
   align-items: center;
-  gap: 15px;
-  color: #a1a1aa;
-  text-decoration: none;
-  padding: 12px 1rem;
-  border-radius: 8px;
-  font-size: 1.05rem;
-  transition: all 0.3s ease;
-  border-left: 3px solid transparent;
+  gap: 0.75rem;
 }
 
-.nav-item:hover {
-  background-color: #222431;
-  color: #fff;
-}
-
+.nav-item:hover,
 .nav-item.active {
-  background-color: #292a36;
-  color: #fff;
-  border-left: 3px solid #f79c1e; /* Detalhe laranja */
+  background-color: #252530;
+  color: #ffa500;
+}
+
+.menu-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .sidebar-bottom {
-  padding: 0 2rem;
+  margin-top: auto; /* Garante que o perfil fique no rodapé */
 }
 
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 15px;
-  cursor: pointer;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 8px;
 }
 
 .user-avatar {
-  background-color: #2ab8a1;
-  color: #000;
-  width: 35px;
-  height: 35px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background-color: #ffa500;
+  color: #111116;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   font-weight: bold;
-  font-size: 0.9rem;
 }
 
 .user-name {
-  color: #fff;
-  font-size: 1rem;
-}
-
-/* =======================================
-   ESTILOS DOS ÍCONES SVG
-   ======================================= */
-.menu-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  display: block;
-  /* Se os ícones que você baixou estiverem pretos, descomente a linha abaixo para invertê-los para branco: */
-  /* filter: invert(1); */
-}
-
-/* Deixa o ícone com a cor mais viva quando o menu estiver ativo ou com o mouse em cima */
-.nav-item:hover .menu-icon,
-.nav-item.active .menu-icon {
-  filter: brightness(0) invert(1);
+  color: #ffffff;
+  font-weight: 500;
 }

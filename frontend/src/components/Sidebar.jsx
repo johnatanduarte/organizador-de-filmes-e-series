@@ -11,6 +11,7 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
+      {/* Bloco Superior (Logo, Busca e Menu) */}
       <div className="sidebar-top">
         {/* LOGO */}
         <div className="sidebar-logo">

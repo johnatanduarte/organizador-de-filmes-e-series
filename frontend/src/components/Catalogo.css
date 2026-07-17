@@ -1,0 +1,109 @@
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #111116;
+  color: #ffffff;
+  font-family: sans-serif;
+}
+
+.catalogo-content {
+  flex: 1;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* Adiciona espaçamento entre as seções */
+}
+
+.catalogo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.catalogo-header h1 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.catalogo-header p {
+  color: #8e8e9f;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.filtros-bar {
+  display: flex;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background-color: #1a1a22;
+  border: 1px solid #252530;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.search-bar input {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.search-bar input:focus {
+  outline: none;
+}
+
+.categories-list {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.category-pill {
+  background-color: #1a1a22;
+  border: 1px solid #252530;
+  color: #8e8e9f;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s;
+}
+
+.category-pill:hover,
+.category-pill.active {
+  background-color: #ffa500;
+  color: #111116;
+  font-weight: bold;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+.status-msg {
+  color: #8e8e9f;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 4rem;
+  width: 100%;
+}
+
+.tmdb-attribution {
+  margin-top: auto; /* Empurra o rodapé para o final */
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.tmdb-attribution p {
+  font-size: 0.75rem;
+  color: #6c6c7d;
+}
