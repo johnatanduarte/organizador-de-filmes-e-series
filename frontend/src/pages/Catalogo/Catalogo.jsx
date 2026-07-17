@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import Sidebar from "../../components/Sidebar.jsx";
 import MovieCard from "../../components/MovieCard.jsx";
-import "./Catalogo.css";
+import styles from "./Catalogo.module.css";
 
 import iconeLupa from "../../assets/icons/lupa.svg";
 
@@ -42,6 +42,7 @@ function Catalogo () {
 
       async function fetchFilmes() {
         try {
+
             setCarregando(true);
             setErro(null);
 
@@ -74,16 +75,16 @@ function Catalogo () {
        }
     return (
         <>
-            <div className="layout-container">
+            <div className={styles.pageRoot}>
                 <Sidebar />
-                <main className="catalogo-content">
-                    <header className="catalogo-header">
+                <main className={styles.catalogoContent}>
+                    <header className={styles.catalogoHeader}>
                         <h1>Catálogo</h1>
                          <p>Explore filmes para descobrir sua próxima escolha</p>
                     </header>
                     
-                    <div className="filtros-bar">
-                        <div className="search-bar">
+                    <div className={styles.filtrosBar}>
+                        <div className={styles.searchBar}>
                             <img src={iconeLupa} alt="Pesquisar" style={{ width: "18px", height: "18px" }}></img>
                             <input 
                                 type="text"
@@ -94,9 +95,9 @@ function Catalogo () {
                         </div>
                     </div>
 
-                     <div className="categories-list">
+                     <div className={styles.categoriesList}>
                         <span
-                            className={`category-pill ${generoSelecionado === "todos" ? "active" : ""}`}
+                            className={`${styles.categoryPill} ${generoSelecionado === "todos" ? styles.active : ""}`}
                             onClick={() => setGeneroSelecionado("todos")}
                         >
                             Todos
@@ -104,7 +105,7 @@ function Catalogo () {
                         {generos.map((genero) => (
                             <span
                                 key = {genero.id}
-                                 className={`category-pill ${generoSelecionado === String(genero.id) ? "active" : ""}`}
+                                 className={`${styles.categoryPill} ${generoSelecionado === String(genero.id) ? styles.active : ""}`}
                                  onClick={() => setGeneroSelecionado(String(genero.id))}
                             >
                                 {genero.name}
@@ -112,30 +113,33 @@ function Catalogo () {
                         ))}
                         </div>
 
-                        {carregando && <p className="status-msg">Carregando filmes...</p>}
-                        {erro && <p className="status-msg">Erro : {erro}</p>}
+                        {carregando && <p className={styles.statusMsg}>Carregando filmes...</p>}
+                        {erro && <p className={styles.statusMsg}>Erro : {erro}</p>}
 
                           {!carregando && !erro && (
-                            <div className="movies-grid">
+
+                            <div className={styles.moviesGrid}>
                                     {filmes.map((filme) => (
-                                    <MovieCard
-                                        key={filme.id}
-                                        id={filme.id}
-                                        titulo={filme.title}
-                                        subtitulo={filme.release_date ? filme.release_date.slice(0, 4) : ""}
-                                        poster={filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null}
-                                        mostrarBotaoAdd={true}
-                                    />
+                                 <MovieCard
+                                    key={filme.id}
+                                    id={filme.id}
+                                    titulo={filme.title}
+                                    subtitulo={filme.release_date ? filme.release_date.slice(0, 4) : ""}
+                                    poster={filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null}
+                                    genre_ids={filme.genre_ids}
+                                    mostrarBotaoAdd={true}
+                                />
                                 ))}
                             </div>
-                            )}
+                            )}  
 
                                 {!carregando && !erro && filmes.length === 0 && (
-                                    <p className="status-msg">
+                                    <p className={styles.statusMsg}>
                                          Nenhum filme encontrado.
                                     </p>
                                 )}
-                    <footer className="tmdb-attribution">
+                                
+                    <footer className={styles.tmdbAttribution}>
                     <p>Este produto usa a API do TMDB, mas não é endossado ou certificado pelo TMDB.</p>
                     </footer>
                 </main>

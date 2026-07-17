@@ -15,7 +15,7 @@ export default function Sidebar() {
       <div className="sidebar-top">
         {/* LOGO */}
         <div className="sidebar-logo">
-          <img src={Icon} alt="FlashView Logo" className="logo-icon" />
+          <img src={Icon} alt="FlashView Logo" className="sidebar-logo-icon" />
           <h2>
             Flash<span>View</span>
           </h2>
@@ -24,16 +24,16 @@ export default function Sidebar() {
         {/* NAVEGAÇÃO */}
         <nav className="sidebar-nav">
           <Link
-            to="/inicio"
-            className={`nav-item ${location.pathname === "/inicio" ? "active" : ""}`}
+            to="/Inicio"
+            className={`nav-item ${location.pathname === "/Inicio" ? "active" : ""}`}
           >
             <img src={iconeInicio} alt="Ícone Início" className="menu-icon" />
             Inicio
           </Link>
 
           <Link
-            to="/catalogo"
-            className={`nav-item ${location.pathname === "/catalogo" ? "active" : ""}`}
+            to="/Catalogo"
+            className={`nav-item ${location.pathname === "/Catalogo" ? "active" : ""}`}
           >
             <img
               src={iconeCatalogo}
@@ -44,8 +44,8 @@ export default function Sidebar() {
           </Link>
 
           <Link
-            to="/minha-lista"
-            className={`nav-item ${location.pathname === "/minha-lista" ? "active" : ""}`}
+            to="/MinhaLista"
+            className={`nav-item ${location.pathname === "/MinhaLista" ? "active" : ""}`}
           >
             <img
               src={iconeMinhaLista}

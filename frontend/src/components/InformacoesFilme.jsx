@@ -11,7 +11,10 @@ function InformacoesFilme({ filme }) {
                 <span>⭐ {filme.vote_average.toFixed(1)}</span>
 
                 <span>
-                    📅 {filme.release_date.slice(0,4)}
+                    📅 {(() => {
+                        const [ano, mes, dia] = filme.release_date.split("-");
+                        return new Date(ano, mes - 1, dia).toLocaleDateString("pt-BR");
+                    })()}
                 </span>
 
                 <span>

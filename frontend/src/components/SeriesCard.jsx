@@ -1,3 +1,5 @@
+import styles from "./SeriesCard.module.css";
+
 export default function SeriesCard({
   titulo,
   subtitulo,
@@ -6,12 +8,12 @@ export default function SeriesCard({
   iconeAssistido,
 }) {
   return (
-    <div className="series-card">
-      <div className="series-image-placeholder"></div>
-      <div className="series-info">
+    <div className={styles.seriesCard}>
+      <div className={styles.seriesImagePlaceholder}></div>
+      <div className={styles.seriesInfo}>
         <h4>{titulo}</h4>
         <p>{subtitulo}</p>
-        <button className={`btn-mark ${finalizado ? "btn-done" : ""}`}>
+        <button className={`${styles.btnMark} ${finalizado ? styles.btnDone : ""}`}>
           {textoBotao}
           {finalizado && iconeAssistido && (
             <img

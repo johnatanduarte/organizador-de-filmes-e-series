@@ -6,7 +6,7 @@ import StatCard from "../../components/StatCard.jsx";
 import SeriesCard from "../../components/SeriesCard.jsx";
 import MovieCard from "../../components/MovieCard.jsx";
 
-import "./Inicio.css";
+import styles from "./Inicio.module.css";
 
 import iconeLupa from "../../assets/icons/lupa.svg";
 import iconeAssistidos from "../../assets/icons/icone_assistidos.svg";
@@ -101,7 +101,7 @@ export default function Inicio() {
 
         const data = await response.json();
 
-        setFilmesPopulares(data.results.slice(0,5));
+        setFilmesPopulares(data.results.slice(0,6));
 
     } catch (erro) {
 
@@ -152,16 +152,16 @@ export default function Inicio() {
 }
 
   return (
-    <div className="layout-container">
+    <div className={styles.layoutContainer}>
 
       <Sidebar />
 
-      <main className="inicio-content">
+      <main className={styles.inicioContent}>
 
         {/* PESQUISA */}
-        <header className="inicio-header">
+        <header className={styles.inicioHeader}>
 
-          <div className="search-bar">
+          <div className={styles.searchBar}>
 
             <img
               src={iconeLupa}
@@ -183,13 +183,13 @@ export default function Inicio() {
         {/* RESULTADOS DA BUSCA */}
         {resultadoBusca.length > 0 && (
 
-          <section className="content-section">
+          <section className={styles.contentSection}>
 
-            <div className="section-header">
+            <div className={styles.sectionHeader}>
               <h3>Resultados da Pesquisa</h3>
             </div>
 
-            <div className="movies-grid">
+            <div className={styles.moviesGrid}>
 
               {resultadoBusca.map((filme) => (
 
@@ -219,13 +219,13 @@ export default function Inicio() {
         )}
 
         {/* BOAS-VINDAS */}
-        <section className="welcome-section">
+        <section className={styles.welcomeSection}>
 
           <h1>Olá, Lucas</h1>
 
           <p>O que você quer organizar hoje?</p>
 
-          <div className="stats-grid">
+          <div className={styles.statsGrid}>
 
             {estatisticas.map((stat) => (
 
@@ -243,19 +243,19 @@ export default function Inicio() {
         </section>
 
         {/* SÉRIES */}
-        <section className="content-section">
+        <section className={styles.contentSection}>
 
-          <div className="section-header">
+          <div className={styles.sectionHeader}>
 
             <h3>Séries em Andamento</h3>
 
-            <a href="#" className="link-cyan">
+            <a href="#" className={styles.linkCyan}>
               Ver tudo
             </a>
 
           </div>
 
-          <div className="series-grid">
+          <div className={styles.seriesGrid}>
 
             {seriesEmAndamento.map((serie) => (
 
@@ -275,19 +275,19 @@ export default function Inicio() {
         </section>
 
         {/* POPULARES */}
-        <section className="content-section">
+        <section className={styles.contentSection}>
 
-          <div className="section-header">
+          <div className={styles.sectionHeader}>
 
             <h3>Populares no Catálogo</h3>
 
-            <Link to="/Catalogo" className="link-cyan">
+            <Link to="/Catalogo" className={styles.linkCyan}>
               Ver tudo
             </Link>
 
           </div>
 
-          <div className="movies-grid">
+          <div className={styles.moviesGrid}>
 
             {filmesPopulares.map((filme) => (
 
@@ -315,28 +315,27 @@ export default function Inicio() {
         </section>
 
         {/* CATEGORIAS */}
-     {/* CATEGORIAS */}
-<section className="content-section categories-section">
+<section className={styles.contentSection}>
 
-    <div className="section-header">
+    <div className={styles.sectionHeader}>
 
         <h3>Explorar por Categoria</h3>
 
         <Link
             to="/Catalogo"
-            className="link-cyan"
+            className={styles.linkCyan}
         >
             Ver catálogo
         </Link>
 
     </div>
 
-    <div className="categories-list">
+    <div className={styles.categoriesList}>
 
         <span
-            className={`category-pill ${
+            className={`${styles.categoryPill} ${
                 generoSelecionado === "todos"
-                    ? "active"
+                    ? styles.active
                     : ""
             }`}
             onClick={() => setGeneroSelecionado("todos")}
@@ -348,9 +347,9 @@ export default function Inicio() {
 
             <span
                 key={genero.id}
-                className={`category-pill ${
+                className={`${styles.categoryPill} ${
                     generoSelecionado === String(genero.id)
-                        ? "active"
+                        ? styles.active
                         : ""
                 }`}
                 onClick={() =>
@@ -366,7 +365,7 @@ export default function Inicio() {
 
   </section>
 
-    <footer className="tmdb-attribution">
+    <footer className={styles.tmdbAttribution}>
       <p>Este produto usa a API do TMDB, mas não é endossado ou certificado pelo TMDB.</p>
     </footer>
       </main>

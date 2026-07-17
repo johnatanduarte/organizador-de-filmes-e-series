@@ -1,6 +1,8 @@
 import { useState } from "react"; // O hook useState é a função que permite um componente "guardar" e atualizar dados que, quando mudam, fazem a tela renderizar sozinha.
 import { Link } from 'react-router-dom';
-import './Cadastro.css';
+import styles from './Cadastro.module.css';
+import NavBar from '../../components/Navbar/Navbar'
+
 
 
 const Cadastro = () => {
@@ -38,9 +40,12 @@ const Cadastro = () => {
 
     return (
         <>
-            <div className="register-page">
+
+            <NavBar />
+            <div className={styles.registerPage}>
                 {/* onSubmit conecta o envio do form à função handleSubmit */}
-               <form onSubmit={handleSubmit} className="register-form">
+
+               <form onSubmit={handleSubmit} className={styles.registerForm}>
 
                 <h2>Cadastro</h2>
 
@@ -80,15 +85,12 @@ const Cadastro = () => {
                     required
                 />
 
-                 <div className="forgot-password">
-                    <Link to ="/EsqueceuSenha">Esqueceu a senha?</Link> {/* O Link ja está funcional. */}
-                </div>
 
-                <button type="submit" className="btn-submit">
+                <button type="submit" className={styles.btnSubmit}>
                     Cadastrar
                 </button>
 
-                <div className="login-redirect">
+                <div className={styles.loginRedirect}>
                     Já Possui Uma Conta? <Link to="/">Login</Link>
                 </div>
 

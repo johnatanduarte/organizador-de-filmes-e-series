@@ -6,7 +6,7 @@ import "./DetalhesFilme.css";
 import BannerFilme from "../../components/BannerFilme";
 import PosterFilme from "../../components/PosterFilme";
 import InformacoesFilme from "../../components/InformacoesFilme";
-import SinopseFilme from "../../components/SinopseFilme";
+import SinopseFilme from "../../components/SinopseFilme";   
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -78,7 +78,10 @@ function DetalhesFilme() {
                 <InformacoesFilme filme={filme} />
 
             </div>
-            <Link to ="/Catalogo" className="btn-voltar">Voltar</Link>
+            <div className="btn-detail">
+                <Link to ="/Catalogo" className="btn-voltar ">Voltar</Link>
+            </div>
+
             <SinopseFilme overview={filme.overview} />
         
 

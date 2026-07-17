@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/Cadastro" element={<Cadastro />} />
         <Route path="/EsqueceuSenha" element={<EsqueceuSenha />} />
-        <Route path="/minha-lista" element={<MinhaLista />} />
+        <Route path="/MinhaLista" element={<MinhaLista />} />
         <Route path="/Inicio" element={<Inicio />} />
         <Route path="/Catalogo" element={<Catalogo />} />
         <Route path="/filme/:id" element={<DetalhesFilme />} />
