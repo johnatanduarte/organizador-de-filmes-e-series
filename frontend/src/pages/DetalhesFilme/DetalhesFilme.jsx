@@ -9,6 +9,7 @@ import InformacoesFilme from "../../components/InformacoesFilme";
 import SinopseFilme from "../../components/SinopseFilme";
 import { adicionarNaLista, estaNaLista } from "../../utils/minhaLista";
 import { removerDaLista } from "../../utils/minhaLista";
+import ComentariosFilme from "../../components/ComentariosFilme";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const IMG_BASE = "https://image.tmdb.org/t/p/w300";
@@ -99,6 +100,7 @@ function DetalhesFilme() {
       </div>
 
       <SinopseFilme overview={filme.overview} />
+      <ComentariosFilme filmeId={filme.id} />
     </main>
   );
 }
