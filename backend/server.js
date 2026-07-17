@@ -2,18 +2,19 @@ const express = require("express"); // Importa a biblioteca do Express para cria
 const cors = require("cors"); // Importa a biblioteca para lidar com requisições HTTP
 const { Pool } = require("pg"); // Importa a biblioteca do PostgreSQL
 const bcrypt = require("bcrypt"); // Importa a biblioteca de criptografia
+require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Configuração do banco
+// Configuração do banco usando as variáveis de ambiente
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "cine_organizer",
-  password: "senha123",
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASS,
+  port: process.env.DB_PORT,
 });
 
 // Rota de Cadastro
