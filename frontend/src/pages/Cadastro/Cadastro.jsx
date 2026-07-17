@@ -1,98 +1,101 @@
-<<<<<<< HEAD
 import { useState } from "react"; // O hook useState é a função que permite um componente "guardar" e atualizar dados que, quando mudam, fazem a tela renderizar sozinha.
 import { Link } from 'react-router-dom';
 import './Cadastro.css';
 
-=======
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar.jsx";
-import "./Cadastro.css"; // Ajustado o caminho do CSS para a mesma pasta
->>>>>>> 63912172cede746ca550e544a757da0d58af9b4b
 
 const Cadastro = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  }
+    // state único guardando todos os campos do formulário num objeto.
+    const [formData, setFormData] = useState ({name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    })
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("As senhas não coincidem!");
-      return;
-    } else {
-      alert("O formulário foi enviado com sucesso!");
+    // roda a cada tecla digitada em qualquer input.
+    function handleChange(e) {
+        const {name, value} = e.target; // pega o "name" do input e o que foi digitado.
+        setFormData ({...formData, [name] : value});   // copia o resto do objeto e atualiza só o campo alterado.
     }
 
-    console.log("Dados do cadastro : ", formData);
-    // Aqui entra a chamada pra API/backend, salvando o usuário
-  }
+    // roda quando o formulário é enviado (botão ou Enter)
+    function handleSubmit(e) {
+        e.preventDefault(); // impede o navegador de recarregar a página (comportamento padrão do <form>)
 
-  return (
-    <>
-      {/* Navbar renderizado no topo da página de Cadastro */}
-      <Navbar />
+         // validação simples: senha e confirmação precisam ser iguais
+        if(formData.password !== formData.confirmPassword) {
+            alert("As senhas não coincidem!");
+            return; // para a função aqui, não deixa continuar
+        }
+        else {
+            alert("O formulário foi enviado com sucesso!")
+        }
+        
+        console.log("Dados do cadastro : ", formData);
+        //  aqui entra a chamada pra API/backend, salvando o usuário
+    }
 
-      <div className="register-page">
-        <form onSubmit={handleSubmit} className="register-form">
-          <h2>Cadastro</h2>
 
-          <label>Nome Completo</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+    return (
+        <>
+            <div className="register-page">
+                {/* onSubmit conecta o envio do form à função handleSubmit */}
+               <form onSubmit={handleSubmit} className="register-form">
 
-          <label>E-mail </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+                <h2>Cadastro</h2>
 
-          <label>Senha </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+                <label>Nome Completo</label>
+                <input 
+                    type="text" 
+                    name = "name"  // precisa bater com a chave no formData
+                    value = {formData.name} // valor sempre vem do state (input controlado)
+                    onChange = {handleChange}  // atualiza o state a cada tecla
+                    required  
+                />
 
-          <label> Confirmar Senha </label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-          
-          <button type="submit" className="btn-submit">
-            Cadastrar
-          </button>
+                <label>E-mail </label>
+                <input 
+                    type = "email"
+                    name = "email"
+                    value = {formData.email}
+                    onChange = {handleChange}
+                    required
+                />
 
-          <div className="login-redirect">
-            Já Possui Uma Conta? <Link to="/">Login</Link>
-          </div>
-        </form>
-      </div>
-    </>
-  );
-};
+                <label>Senha </label>
+                <input 
+                    type = "password"
+                    name = "password"
+                    value = {formData.password}
+                    onChange = {handleChange}
+                    required
+                />
+
+                <label> Confirmar Senha </label>
+                <input
+                    type = "password"
+                    name = "confirmPassword"
+                    value = {formData.confirmPassword}
+                    onChange = {handleChange}
+                    required
+                />
+
+                 <div className="forgot-password">
+                    <Link to ="/EsqueceuSenha">Esqueceu a senha?</Link> {/* O Link ja está funcional. */}
+                </div>
+
+                <button type="submit" className="btn-submit">
+                    Cadastrar
+                </button>
+
+                <div className="login-redirect">
+                    Já Possui Uma Conta? <Link to="/">Login</Link>
+                </div>
+
+               </form>
+            </div>
+        </>
+    )
+}
 
 export default Cadastro;
