@@ -3,6 +3,7 @@ import styles from "./MinhaLista.module.css";
 import Sidebar from "../../components/Sidebar.jsx";
 import MovieCard from "../../components/MovieCard.jsx";
 import iconeLupa from "../../assets/icons/lupa.svg";
+import { obterLista, removerDaLista } from "../../utils/minhaLista";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -12,10 +13,9 @@ export default function MinhaLista() {
   const [generos, setGeneros] = useState([]);
   const [generoSelecionado, setGeneroSelecionado] = useState("todos");
 
-  // Carrega filmes salvos
+  // Carrega filmes salvos (da lista do usuário logado)
   useEffect(() => {
-    const lista = JSON.parse(localStorage.getItem("minhaLista")) || [];
-    setFilmes(lista);
+    setFilmes(obterLista());
   }, []);
 
   // Busca gêneros do TMDB
@@ -39,11 +39,8 @@ export default function MinhaLista() {
 
   // Remove filme da lista
   function removerFilme(id) {
-    const novaLista = filmes.filter((filme) => filme.id !== id);
-
-    setFilmes(novaLista);
-
-    localStorage.setItem("minhaLista", JSON.stringify(novaLista));
+    removerDaLista(id);
+    setFilmes((prev) => prev.filter((filme) => filme.id !== id));
   }
 
   // Pesquisa + filtro gênero
