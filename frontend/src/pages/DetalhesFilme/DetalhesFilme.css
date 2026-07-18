@@ -9,6 +9,10 @@
   --color-border: #2e313f;
 }
 
+main {
+  margin-bottom: 1rem;
+}
+
 .detalhes-page {
   color: var(--color-text);
   min-height: 100vh;

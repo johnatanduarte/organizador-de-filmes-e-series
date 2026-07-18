@@ -7,6 +7,7 @@ import MinhaLista from './pages/MinhaLista/MinhaLista.jsx';
 import Inicio from './pages/Inicio/Inicio.jsx';
 import Catalogo from './pages/Catalogo/Catalogo.jsx';
 import DetalhesFilme from './pages/DetalhesFilme/DetalhesFilme';
+import DetalhesSeries from "./pages/DetalhesSeries/DetalhesSeries.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/Inicio" element={<Inicio />} />
         <Route path="/Catalogo" element={<Catalogo />} />
         <Route path="/filme/:id" element={<DetalhesFilme />} />
+        <Route path="/serie/:id" element={<DetalhesSeries />} />
       </Routes>
     </>
   );

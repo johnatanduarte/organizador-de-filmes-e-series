@@ -11,9 +11,14 @@ export default function MovieCard({
   mostrarBotaoRemover,
   onRemover,
   genre_ids,
+  tipo = "movie", // "movie" ou "tv"
 }) {
 
   const navigate = useNavigate();
+
+  function handleClick() {
+    navigate(tipo === "tv" ? `/serie/${id}` : `/filme/${id}`);
+  }
 
   function handleAdicionar(e) {
     e.stopPropagation();
@@ -24,6 +29,7 @@ export default function MovieCard({
       poster_path: poster,
       release_date: subtitulo,
       genre_ids,
+      tipo,
     });
   }
 
@@ -36,7 +42,7 @@ export default function MovieCard({
   return (
     <div
       className={styles.movieItem}
-      onClick={() => navigate(`/filme/${id}`)}
+      onClick={handleClick}
     >
       <div
         className={styles.moviePoster}

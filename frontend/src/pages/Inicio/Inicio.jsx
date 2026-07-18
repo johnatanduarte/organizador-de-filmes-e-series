@@ -22,6 +22,7 @@ export default function Inicio() {
   const [generos, setGeneros] = useState([]);
   const [generoSelecionado, setGeneroSelecionado] = useState("todos");
   const navigate = useNavigate();
+  const usuarioNome = localStorage.getItem("usuarioNome") || "Usuário";
 
 
   const estatisticas = [
@@ -221,7 +222,7 @@ export default function Inicio() {
         {/* BOAS-VINDAS */}
         <section className={styles.welcomeSection}>
 
-          <h1>Olá, Lucas</h1>
+        <span className={styles.userName}>{usuarioNome}</span>
 
           <p>O que você quer organizar hoje?</p>
 
