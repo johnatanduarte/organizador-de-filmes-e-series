@@ -75,8 +75,26 @@
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+}
+
+.btn-sair {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: #888;
   cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.btn-sair:hover {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
 }
 
 .user-avatar {
