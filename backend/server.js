@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt"); // Importa a biblioteca de criptografia
 require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
 
 const app = express();
+app.set("etag", false);
 app.use(cors());
 app.use(express.json());
 
@@ -79,6 +80,109 @@ app.post("/login", async (req, res) => {
     });
   } catch (erro) {
     console.error("Erro no login:", erro);
+    res.status(500).json({ erro: "Erro interno no servidor." });
+  }
+});
+
+// Lista todos os comentários de um filme (com o nome e usuario_id de quem comentou)
+app.get("/comentarios/:filmeId", async (req, res) => {
+  const { filmeId } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT avaliacoes.id, avaliacoes.usuario_id, avaliacoes.comentario,
+              avaliacoes.nota, avaliacoes.data_avaliacao, usuarios.nome
+       FROM avaliacoes
+       JOIN usuarios ON usuarios.id = avaliacoes.usuario_id
+       WHERE avaliacoes.filme_id = $1 AND avaliacoes.comentario IS NOT NULL
+       ORDER BY avaliacoes.data_avaliacao DESC`,
+      [filmeId],
+    );
+    res.json(result.rows);
+  } catch (erro) {
+    console.error("Erro ao buscar comentários:", erro);
+    res.status(500).json({ erro: "Erro interno no servidor." });
+  }
+});
+
+// Cria um novo comentário
+app.post("/comentarios", async (req, res) => {
+  const { usuarioId, filmeId, comentario } = req.body;
+
+  if (!usuarioId || !filmeId || !comentario || !comentario.trim()) {
+    return res.status(400).json({ erro: "Comentário não pode ser vazio." });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO avaliacoes (usuario_id, filme_id, comentario)
+       VALUES ($1, $2, $3)
+       RETURNING id, comentario, data_avaliacao`,
+      [usuarioId, filmeId, comentario.trim()],
+    );
+
+    const usuario = await pool.query(
+      "SELECT nome FROM usuarios WHERE id = $1",
+      [usuarioId],
+    );
+
+    res.status(201).json({ ...result.rows[0], nome: usuario.rows[0].nome });
+  } catch (erro) {
+    console.error("Erro ao salvar comentário:", erro);
+    res.status(500).json({ erro: "Erro interno no servidor." });
+  }
+});
+
+// Edita um comentário (só o dono pode)
+app.put("/comentarios/:id", async (req, res) => {
+  const { id } = req.params;
+  const { usuarioId, comentario } = req.body;
+
+  if (!comentario || !comentario.trim()) {
+    return res.status(400).json({ erro: "Comentário não pode ser vazio." });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE avaliacoes
+       SET comentario = $1
+       WHERE id = $2 AND usuario_id = $3
+       RETURNING id, comentario, data_avaliacao`,
+      [comentario.trim(), id, usuarioId],
+    );
+
+    if (result.rows.length === 0) {
+      return res
+        .status(403)
+        .json({ erro: "Você não pode editar esse comentário." });
+    }
+
+    res.json(result.rows[0]);
+  } catch (erro) {
+    console.error("Erro ao editar comentário:", erro);
+    res.status(500).json({ erro: "Erro interno no servidor." });
+  }
+});
+
+// Exclui um comentário (só o dono pode)
+app.delete("/comentarios/:id", async (req, res) => {
+  const { id } = req.params;
+  const { usuarioId } = req.body;
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM avaliacoes WHERE id = $1 AND usuario_id = $2 RETURNING id`,
+      [id, usuarioId],
+    );
+
+    if (result.rows.length === 0) {
+      return res
+        .status(403)
+        .json({ erro: "Você não pode excluir esse comentário." });
+    }
+
+    res.json({ mensagem: "Comentário excluído." });
+  } catch (erro) {
+    console.error("Erro ao excluir comentário:", erro);
     res.status(500).json({ erro: "Erro interno no servidor." });
   }
 });
