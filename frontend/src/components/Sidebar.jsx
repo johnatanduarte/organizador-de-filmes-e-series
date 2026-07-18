@@ -9,6 +9,15 @@ import Icon from "../assets/flashview_simbolo.svg";
 export default function Sidebar() {
   const location = useLocation();
 
+  const usuarioNome = localStorage.getItem("usuarioNome") || "Usuário";
+
+  const iniciais = usuarioNome
+    .split(" ")
+    .map((palavra) => palavra[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <aside className="sidebar">
       {/* Bloco Superior (Logo, Busca e Menu) */}
@@ -72,8 +81,8 @@ export default function Sidebar() {
       {/* PERFIL DO USUÁRIO */}
       <div className="sidebar-bottom">
         <div className="user-profile">
-          <div className="user-avatar">LR</div>
-          <span className="user-name">Lucas</span>
+          <div className="user-avatar">{iniciais}</div>
+          <span className="user-name">{usuarioNome}</span>
         </div>
       </div>
     </aside>

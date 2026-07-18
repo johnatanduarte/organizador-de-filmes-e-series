@@ -77,6 +77,7 @@ app.post("/login", async (req, res) => {
     res.json({
       mensagem: "Login realizado com sucesso!",
       usuarioId: usuario.id,
+      usuarioNome: usuario.nome,
     });
   } catch (erro) {
     console.error("Erro no login:", erro);

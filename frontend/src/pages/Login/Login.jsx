@@ -42,6 +42,7 @@ function Login() {
 
       // Sucesso! Salva o ID do usuário no navegador para usarmos nas outras telas
       localStorage.setItem("usuarioId", data.usuarioId);
+      localStorage.setItem("usuarioNome", data.usuarioNome); 
 
       // Redireciona para o Início (ou para o Catálogo/Minha Lista, dependendo das suas rotas)
       navigate("/inicio");
