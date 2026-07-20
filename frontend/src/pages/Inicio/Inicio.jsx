@@ -25,7 +25,8 @@ export default function Inicio() {
   const usuarioNome = localStorage.getItem("usuarioNome") || "Usuário";
   const quantidadeQueroAssistir = obterLista().length;
   const quantidadeAssistidos = obterAssistidos().length;
-
+  const [tipoConteudo, setTipoConteudo] = useState("movie");
+  
   const estatisticas = [
     {
       id: 1,
@@ -66,50 +67,49 @@ export default function Inicio() {
   ];
 
   useEffect(() => {
-    carregarFilmes();
-  }, [generoSelecionado]);
+  carregarFilmes();
+}, [generoSelecionado,tipoConteudo]);
 
   useEffect(() => {
-    carregarGeneros();
-  }, []);
+  carregarGeneros();
+}, [tipoConteudo]);
 
   useEffect(() => {
-    if (busca.trim() === "") {
-      setResultadoBusca([]);
-      return;
-    }
+  if (busca.trim() === "") {
+    setResultadoBusca([]);
+    return;
+  }
 
-    const timeout = setTimeout(() => {
-      pesquisarFilmes();
-    }, 300);
+  const timeout = setTimeout(() => {
+    pesquisarFilmes();
+  }, 300);
 
-    return () => clearTimeout(timeout);
-  }, [busca]);
+  return () => clearTimeout(timeout);
+}, [busca, tipoConteudo]); // <-- adiciona tipoConteudo aqui
 
   async function carregarFilmes() {
-    try {
-      let url;
+  try {
+    let url;
 
-      if (generoSelecionado === "todos") {
-        url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=pt-BR`;
-      } else {
-        url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=pt-BR&with_genres=${generoSelecionado}`;
-      }
-
-      const response = await fetch(url);
-
-      const data = await response.json();
-
-      setFilmesPopulares(data.results.slice(0, 6));
-    } catch (erro) {
-      console.log(erro);
+    if (generoSelecionado === "todos") {
+      url = `https://api.themoviedb.org/3/${tipoConteudo}/popular?api_key=${API_KEY}&language=pt-BR`;
+    } else {
+      url = `https://api.themoviedb.org/3/discover/${tipoConteudo}?api_key=${API_KEY}&language=pt-BR&with_genres=${generoSelecionado}`;
     }
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    setFilmesPopulares(data.results.slice(0, 6));
+  } catch (erro) {
+    console.log(erro);
   }
+}
 
   async function pesquisarFilmes() {
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(busca)}`,
+        `https://api.themoviedb.org/3/search/${tipoConteudo}?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(busca)}`,
       );
 
       const data = await response.json();
@@ -123,7 +123,7 @@ export default function Inicio() {
   async function carregarGeneros() {
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=pt-BR`,
+        `https://api.themoviedb.org/3/genre/${tipoConteudo}/list?api_key=${API_KEY}&language=pt-BR`,
       );
 
       const data = await response.json();
@@ -139,6 +139,27 @@ export default function Inicio() {
       <Sidebar />
 
       <main className={styles.inicioContent}>
+
+          {/* Mudar tipo (movie/tv) */}
+          <div className={styles.tipoToggle}>
+                <span
+                  className={`${styles.categoryPill} ${
+                    tipoConteudo === "movie" ? styles.active : ""
+                  }`}
+                  onClick={() => setTipoConteudo("movie")}
+                >
+                  Filmes
+                </span>
+
+                <span
+                  className={`${styles.categoryPill} ${
+                    tipoConteudo === "tv" ? styles.active : ""
+                  }`}
+                  onClick={() => setTipoConteudo("tv")}
+                >
+                  Séries
+                </span>
+            </div>
         {/* PESQUISA */}
         <header className={styles.inicioHeader}>
           <div className={styles.searchBar}>
@@ -157,6 +178,8 @@ export default function Inicio() {
           </div>
         </header>
 
+
+
         {/* RESULTADOS DA BUSCA */}
         {resultadoBusca.length > 0 && (
           <section className={styles.contentSection}>
@@ -169,14 +192,17 @@ export default function Inicio() {
                 <MovieCard
                   key={filme.id}
                   id={filme.id}
-                  titulo={filme.title}
+                 titulo={tipoConteudo === "tv" ? filme.name : filme.title}
                   subtitulo={
-                    filme.release_date ? filme.release_date.slice(0, 4) : ""
-                  }
+                      tipoConteudo === "tv"
+                        ? filme.first_air_date?.slice(0,4)
+                        : filme.release_date?.slice(0,4)
+                          }
                   poster={
                     filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null
                   }
-                  mostrarBotaoAdd={false}
+                  mostrarBotaoAdd={true}
+                   tipo={tipoConteudo}  
                 />
               ))}
             </div>
@@ -238,17 +264,20 @@ export default function Inicio() {
           <div className={styles.moviesGrid}>
             {filmesPopulares.map((filme) => (
               <MovieCard
-                key={filme.id}
-                id={filme.id}
-                titulo={filme.title}
-                subtitulo={
-                  filme.release_date ? filme.release_date.slice(0, 4) : ""
-                }
-                poster={
-                  filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null
-                }
-                mostrarBotaoAdd={true}
-              />
+                  key={filme.id}
+                  id={filme.id}
+                 titulo={tipoConteudo === "tv" ? filme.name : filme.title}
+                  subtitulo={
+                      tipoConteudo === "tv"
+                        ? filme.first_air_date?.slice(0,4)
+                        : filme.release_date?.slice(0,4)
+                          }
+                  poster={
+                    filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null
+                  }
+                  mostrarBotaoAdd={true}
+                   tipo={tipoConteudo}  
+                />
             ))}
           </div>
         </section>
