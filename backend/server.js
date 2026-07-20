@@ -188,4 +188,52 @@ app.delete("/comentarios/:id", async (req, res) => {
   }
 });
 
+// Verifica se o e-mail existe (etapa 1 do "Esqueceu Senha")
+app.post("/verificar-email", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const result = await pool.query("SELECT id FROM usuarios WHERE email = $1", [email]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ erro: "Não encontramos uma conta com esse e-mail." });
+    }
+
+    res.json({ mensagem: "E-mail encontrado." });
+  } catch (erro) {
+    console.error("Erro ao verificar e-mail:", erro);
+    res.status(500).json({ erro: "Erro interno no servidor." });
+  }
+});
+
+// Redefine a senha (etapa 2 do "Esqueceu Senha")
+app.post("/redefinir-senha", async (req, res) => {
+  const { email, novaSenha } = req.body;
+
+  if (!novaSenha || novaSenha.length < 6) {
+    return res.status(400).json({ erro: "A senha precisa ter pelo menos 6 caracteres." });
+  }
+
+  try {
+    const usuarioExistente = await pool.query("SELECT id FROM usuarios WHERE email = $1", [email]);
+
+    if (usuarioExistente.rows.length === 0) {
+      return res.status(404).json({ erro: "Usuário não encontrado." });
+    }
+
+    const saltRounds = 10;
+    const novaSenhaHash = await bcrypt.hash(novaSenha, saltRounds);
+
+    await pool.query("UPDATE usuarios SET senha_hash = $1 WHERE email = $2", [
+      novaSenhaHash,
+      email,
+    ]);
+
+    res.json({ mensagem: "Senha redefinida com sucesso!" });
+  } catch (erro) {
+    console.error("Erro ao redefinir senha:", erro);
+    res.status(500).json({ erro: "Erro interno no servidor." });
+  }
+});
+
 app.listen(3000, () => console.log("Backend rodando na porta 3000"));
