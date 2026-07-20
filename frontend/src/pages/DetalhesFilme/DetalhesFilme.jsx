@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import "./DetalhesFilme.css";
 
@@ -9,6 +9,7 @@ import InformacoesFilme from "../../components/InformacoesFilme";
 import SinopseFilme from "../../components/SinopseFilme";
 import { adicionarNaLista, estaNaLista } from "../../utils/minhaLista";
 import { removerDaLista } from "../../utils/minhaLista";
+import { marcarComoAssistido, desmarcarAssistido, estaAssistido } from "../../utils/assistidos";
 import ComentariosFilme from "../../components/ComentariosFilme";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -16,11 +17,13 @@ const IMG_BASE = "https://image.tmdb.org/t/p/w300";
 
 function DetalhesFilme() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [filme, setFilme] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
-  const [naLista, setNaLista] = useState(false); // novo state
+  const [naLista, setNaLista] = useState(false);
+  const [assistido, setAssistido] = useState(false);
 
   useEffect(() => {
     async function carregarFilme() {
@@ -38,7 +41,8 @@ function DetalhesFilme() {
         const data = await response.json();
 
         setFilme(data);
-        setNaLista(estaNaLista(data.id)); // checa assim que o filme carrega
+        setNaLista(estaNaLista(data.id));
+        setAssistido(estaAssistido(data.id));
       } catch (err) {
         setErro(err.message);
       } finally {
@@ -64,6 +68,25 @@ function DetalhesFilme() {
         genre_ids: filme.genres ? filme.genres.map((g) => g.id) : [],
       });
       setNaLista(true);
+    }
+  }
+
+function handleToggleAssistido() {
+    if (assistido) {
+      desmarcarAssistido(filme.id);
+      setAssistido(false);
+    } else {
+      marcarComoAssistido({
+        id: filme.id,
+        title: filme.title,
+        poster_path: filme.poster_path
+          ? `${IMG_BASE}${filme.poster_path}`
+          : null,
+        release_date: filme.release_date,
+        genre_ids: filme.genres ? filme.genres.map((g) => g.id) : [],
+        tipo: "movie",
+      });
+      setAssistido(true);
     }
   }
 
@@ -96,6 +119,14 @@ function DetalhesFilme() {
           {naLista
             ? "✓ Na sua Lista (clique para remover)"
             : "+ Adicionar à Minha Lista"}
+        </button>
+
+        <button
+          className={assistido ? "btn-na-lista" : "btn-assistido"}
+          onClick={handleToggleAssistido}
+          
+        >
+          {assistido ? "✓ Assistido (clique para remover)" : "Marcar como Assistido"}
         </button>
       </div>
 

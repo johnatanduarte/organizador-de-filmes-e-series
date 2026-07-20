@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import "../DetalhesFilme/DetalhesFilme.css";
 
@@ -8,6 +8,7 @@ import PosterFilme from "../../components/PosterFilme";
 import InformacoesFilme from "../../components/InformacoesFilme";
 import SinopseFilme from "../../components/SinopseFilme";
 import { adicionarNaLista, estaNaLista, removerDaLista } from "../../utils/minhaLista";
+import { marcarComoAssistido, desmarcarAssistido, estaAssistido } from "../../utils/assistidos";
 import ComentariosFilme from "../../components/ComentariosFilme";
 import TemporadasSerie from "../../components/TemporadasSerie";
 
@@ -16,11 +17,13 @@ const IMG_BASE = "https://image.tmdb.org/t/p/w300";
 
 function DetalhesSeries() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [serie, setSerie] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
   const [naLista, setNaLista] = useState(false);
+  const [assistido, setAssistido] = useState(false);
 
   useEffect(() => {
     async function carregarSerie() {
@@ -37,7 +40,6 @@ function DetalhesSeries() {
 
         const data = await response.json();
 
-        // normaliza os campos da série pro mesmo formato que os componentes de filme esperam
         const serieNormalizada = {
           ...data,
           title: data.name,
@@ -47,6 +49,7 @@ function DetalhesSeries() {
 
         setSerie(serieNormalizada);
         setNaLista(estaNaLista(data.id));
+        setAssistido(estaAssistido(data.id));
       } catch (err) {
         setErro(err.message);
       } finally {
@@ -73,6 +76,25 @@ function DetalhesSeries() {
         tipo: "tv",
       });
       setNaLista(true);
+    }
+  }
+
+  function handleToggleAssistido() {
+    if (assistido) {
+      desmarcarAssistido(serie.id);
+      setAssistido(false);
+    } else {
+      marcarComoAssistido({
+        id: serie.id,
+        title: serie.title,
+        poster_path: serie.poster_path
+          ? `${IMG_BASE}${serie.poster_path}`
+          : null,
+        release_date: serie.release_date,
+        genre_ids: serie.genres ? serie.genres.map((g) => g.id) : [],
+        tipo: "tv",
+      });
+      setAssistido(true);
     }
   }
 
@@ -105,6 +127,13 @@ function DetalhesSeries() {
           {naLista
             ? "✓ Na sua Lista (clique para remover)"
             : "+ Adicionar à Minha Lista"}
+        </button>
+
+        <button
+          className={assistido ? "btn-na-lista" : "btn-assistido"}
+          onClick={handleToggleAssistido}
+        >
+          {assistido ? "✓ Assistido (clique para remover)" : "Marcar como Assistido"}
         </button>
       </div>
 

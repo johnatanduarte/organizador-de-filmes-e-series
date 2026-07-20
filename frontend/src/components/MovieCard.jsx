@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./MovieCard.module.css";
-import { adicionarNaLista, removerDaLista } from "../utils/minhaLista";
+import { adicionarNaLista } from "../utils/minhaLista";
 
 export default function MovieCard({
   id,
@@ -11,7 +11,7 @@ export default function MovieCard({
   mostrarBotaoRemover,
   onRemover,
   genre_ids,
-  tipo = "movie", // "movie" ou "tv"
+  tipo = "movie",
 }) {
 
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ export default function MovieCard({
 
   function handleRemover(e) {
     e.stopPropagation();
-    removerDaLista(id);
     onRemover?.(id);
   }
 
