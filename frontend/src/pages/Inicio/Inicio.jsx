@@ -171,7 +171,7 @@ export default function Inicio() {
 
             <input
               type="text"
-              placeholder="Pesquisar filmes..."
+               placeholder={tipoConteudo === "tv" ? "Pesquisar séries..." : "Pesquisar filmes..."}
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
             />
