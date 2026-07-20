@@ -124,6 +124,9 @@ export default function MinhaLista() {
             </p>
           )}
         </section>
+        <footer className={styles.tmdbAttribution}>
+          <p>Este produto usa a API do TMDB, mas não é endossado ou certificado pelo TMDB.</p>
+        </footer>
       </main>
     </>
   );

@@ -78,3 +78,15 @@
   text-align: center;
   padding: 50px;
 }
+
+.tmdbAttribution {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #292a36;
+}
+
+.tmdbAttribution p {
+  color: #6b6b76;
+  font-size: 0.75rem;
+  text-align: center;
+}
