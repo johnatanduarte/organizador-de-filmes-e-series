@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { obterLista } from "../../utils/minhaLista";
+import { obterAssistidos } from "../../utils/assistidos";
 import { Link } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar.jsx";
@@ -23,16 +24,21 @@ export default function Inicio() {
   const [generoSelecionado, setGeneroSelecionado] = useState("todos");
   const usuarioNome = localStorage.getItem("usuarioNome") || "Usuário";
   const quantidadeQueroAssistir = obterLista().length;
+  const quantidadeAssistidos = obterAssistidos().length;
 
   const estatisticas = [
-    { id: 1, valor: "32", legenda: "Assistidos", corTexto: "text-orange" },
+    {
+      id: 1,
+      valor: String(quantidadeAssistidos),
+      legenda: "Assistidos",
+      corTexto: "text-orange",
+    },
     {
       id: 2,
       valor: String(quantidadeQueroAssistir),
       legenda: "Quero Assistir",
       corTexto: "text-cyan",
     },
-    { id: 3, valor: "7", legenda: "Series em Dia", corTexto: "text-white" },
   ];
 
   const seriesEmAndamento = [
