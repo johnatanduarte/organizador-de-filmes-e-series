@@ -78,21 +78,11 @@
   margin-bottom: 1.5rem;
 }
 
-.sectionHeader h3 {
-  font-size: 1.2rem;
-  margin: 0;
-}
 
 .linkCyan {
   color: #2ab8a1;
   text-decoration: none;
   font-size: 0.9rem;
-}
-
-.seriesGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
 }
 
 .moviesGrid {

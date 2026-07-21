@@ -63,7 +63,7 @@ export default function MinhaLista() {
         <header className={styles.headerList}>
           <div>
             <h1>Minha Lista</h1>
-            <p>Filmes que você adicionou para assistir depois.</p>
+            <p>Filmes e séries que você adicionou para assistir depois.</p>
           </div>
 
           <div className={styles.searchBar}>
@@ -71,7 +71,7 @@ export default function MinhaLista() {
 
             <input
               type="text"
-              placeholder="Pesquisar filmes..."
+              placeholder="Pesquisar filmes e séries..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
             />

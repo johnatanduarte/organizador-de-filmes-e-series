@@ -38,7 +38,7 @@ export default function Assistidos() {
 
             <input
               type="text"
-              placeholder="Pesquisar..."
+              placeholder="Pesquisar filmes e séries..."
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
             />

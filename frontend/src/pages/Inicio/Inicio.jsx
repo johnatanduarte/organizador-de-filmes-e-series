@@ -5,13 +5,11 @@ import { Link } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar.jsx";
 import StatCard from "../../components/StatCard.jsx";
-import SeriesCard from "../../components/SeriesCard.jsx";
 import MovieCard from "../../components/MovieCard.jsx";
 
 import styles from "./Inicio.module.css";
 
 import iconeLupa from "../../assets/icons/lupa.svg";
-import iconeAssistidos from "../../assets/icons/icone_assistidos.svg";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const IMG_BASE = "https://image.tmdb.org/t/p/w300";
@@ -26,7 +24,7 @@ export default function Inicio() {
   const quantidadeQueroAssistir = obterLista().length;
   const quantidadeAssistidos = obterAssistidos().length;
   const [tipoConteudo, setTipoConteudo] = useState("movie");
-  
+
   const estatisticas = [
     {
       id: 1,
@@ -42,124 +40,146 @@ export default function Inicio() {
     },
   ];
 
-  const seriesEmAndamento = [
-    {
-      id: 1,
-      titulo: "Game of Thrones",
-      subtitulo: "Próximo: T5 Ep 5",
-      textoBotao: "Marcar assistido",
-      finalizado: false,
-    },
-    {
-      id: 2,
-      titulo: "Mr. Robot",
-      subtitulo: "Próximo: T2 Ep 9",
-      textoBotao: "Marcar assistido",
-      finalizado: false,
-    },
-    {
-      id: 3,
-      titulo: "La Casa de Papel",
-      subtitulo: "Próximo: T3 Ep 2",
-      textoBotao: "Assistido",
-      finalizado: true,
-    },
-  ];
-
+  // Carrega os filmes/séries populares (ou filtrados por gênero).
+  // A flag "ativo" evita que uma resposta desatualizada (ex: de um
+  // gênero que não existe mais no tipo atual) sobrescreva um
+  // resultado mais recente.
   useEffect(() => {
-  carregarFilmes();
-}, [generoSelecionado,tipoConteudo]);
+    let ativo = true;
 
-  useEffect(() => {
-  carregarGeneros();
-}, [tipoConteudo]);
+    async function carregarFilmes() {
+      try {
+        let url;
 
-  useEffect(() => {
-  if (busca.trim() === "") {
-    setResultadoBusca([]);
-    return;
-  }
+        if (generoSelecionado === "todos") {
+          url = `https://api.themoviedb.org/3/${tipoConteudo}/popular?api_key=${API_KEY}&language=pt-BR`;
+        } else {
+          url = `https://api.themoviedb.org/3/discover/${tipoConteudo}?api_key=${API_KEY}&language=pt-BR&with_genres=${generoSelecionado}`;
+        }
 
-  const timeout = setTimeout(() => {
-    pesquisarFilmes();
-  }, 300);
+        const response = await fetch(url);
+        const data = await response.json();
 
-  return () => clearTimeout(timeout);
-}, [busca, tipoConteudo]); // <-- adiciona tipoConteudo aqui
+        const itensNormalizados = (data.results || []).map((item) => ({
+          id: item.id,
+          titulo: tipoConteudo === "tv" ? item.name : item.title,
+          dataLancamento:
+            tipoConteudo === "tv" ? item.first_air_date : item.release_date,
+          poster_path: item.poster_path,
+          genre_ids: item.genre_ids,
+        }));
 
-  async function carregarFilmes() {
-  try {
-    let url;
-
-    if (generoSelecionado === "todos") {
-      url = `https://api.themoviedb.org/3/${tipoConteudo}/popular?api_key=${API_KEY}&language=pt-BR`;
-    } else {
-      url = `https://api.themoviedb.org/3/discover/${tipoConteudo}?api_key=${API_KEY}&language=pt-BR&with_genres=${generoSelecionado}`;
+        if (ativo) {
+          setFilmesPopulares(itensNormalizados.slice(0, 6));
+        }
+      } catch (erro) {
+        console.log(erro);
+      }
     }
 
-    const response = await fetch(url);
-    const data = await response.json();
+    carregarFilmes();
 
-    setFilmesPopulares(data.results.slice(0, 6));
-  } catch (erro) {
-    console.log(erro);
-  }
-}
+    return () => {
+      ativo = false;
+    };
+  }, [generoSelecionado, tipoConteudo]);
 
-  async function pesquisarFilmes() {
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/search/${tipoConteudo}?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(busca)}`,
-      );
+  // Carrega os gêneros do tipo atual e reseta o filtro sempre que o
+  // tipo (filme/série) muda, já que os IDs de gênero são diferentes.
+  useEffect(() => {
+    let ativo = true;
 
-      const data = await response.json();
+    async function carregarGeneros() {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/genre/${tipoConteudo}/list?api_key=${API_KEY}&language=pt-BR`,
+        );
 
-      setResultadoBusca(data.results.slice(0, 6));
-    } catch (erro) {
-      console.error("Erro na pesquisa:", erro);
+        const data = await response.json();
+
+        if (ativo) {
+          setGeneros(data.genres || []);
+        }
+      } catch (erro) {
+        console.error("Erro ao carregar gêneros:", erro);
+      }
     }
-  }
 
-  async function carregarGeneros() {
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/genre/${tipoConteudo}/list?api_key=${API_KEY}&language=pt-BR`,
-      );
+    setGeneroSelecionado("todos"); // reseta o filtro ao trocar de tipo
+    carregarGeneros();
 
-      const data = await response.json();
+    return () => {
+      ativo = false;
+    };
+  }, [tipoConteudo]);
 
-      setGeneros(data.genres || []);
-    } catch (erro) {
-      console.error("Erro ao carregar gêneros:", erro);
+  // Pesquisa com debounce, refeita automaticamente se o tipo mudar
+  // enquanto já existe um termo de busca digitado.
+  useEffect(() => {
+    if (busca.trim() === "") {
+      setResultadoBusca([]);
+      return;
     }
-  }
+
+    let ativo = true;
+
+    const timeout = setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/search/${tipoConteudo}?api_key=${API_KEY}&language=pt-BR&query=${encodeURIComponent(busca)}`,
+        );
+
+        const data = await response.json();
+
+        const itensNormalizados = (data.results || []).map((item) => ({
+          id: item.id,
+          titulo: tipoConteudo === "tv" ? item.name : item.title,
+          dataLancamento:
+            tipoConteudo === "tv" ? item.first_air_date : item.release_date,
+          poster_path: item.poster_path,
+          genre_ids: item.genre_ids,
+        }));
+
+        if (ativo) {
+          setResultadoBusca(itensNormalizados.slice(0, 6));
+        }
+      } catch (erro) {
+        console.error("Erro na pesquisa:", erro);
+      }
+    }, 300);
+
+    return () => {
+      ativo = false;
+      clearTimeout(timeout);
+    };
+  }, [busca, tipoConteudo]);
 
   return (
     <div className={styles.layoutContainer}>
       <Sidebar />
 
       <main className={styles.inicioContent}>
+        {/* Mudar tipo (movie/tv) */}
+        <div className={styles.tipoToggle}>
+          <span
+            className={`${styles.categoryPill} ${
+              tipoConteudo === "movie" ? styles.active : ""
+            }`}
+            onClick={() => setTipoConteudo("movie")}
+          >
+            Filmes
+          </span>
 
-          {/* Mudar tipo (movie/tv) */}
-          <div className={styles.tipoToggle}>
-                <span
-                  className={`${styles.categoryPill} ${
-                    tipoConteudo === "movie" ? styles.active : ""
-                  }`}
-                  onClick={() => setTipoConteudo("movie")}
-                >
-                  Filmes
-                </span>
+          <span
+            className={`${styles.categoryPill} ${
+              tipoConteudo === "tv" ? styles.active : ""
+            }`}
+            onClick={() => setTipoConteudo("tv")}
+          >
+            Séries
+          </span>
+        </div>
 
-                <span
-                  className={`${styles.categoryPill} ${
-                    tipoConteudo === "tv" ? styles.active : ""
-                  }`}
-                  onClick={() => setTipoConteudo("tv")}
-                >
-                  Séries
-                </span>
-            </div>
         {/* PESQUISA */}
         <header className={styles.inicioHeader}>
           <div className={styles.searchBar}>
@@ -171,14 +191,16 @@ export default function Inicio() {
 
             <input
               type="text"
-               placeholder={tipoConteudo === "tv" ? "Pesquisar séries..." : "Pesquisar filmes..."}
+              placeholder={
+                tipoConteudo === "tv"
+                  ? "Pesquisar séries..."
+                  : "Pesquisar filmes..."
+              }
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
             />
           </div>
         </header>
-
-
 
         {/* RESULTADOS DA BUSCA */}
         {resultadoBusca.length > 0 && (
@@ -192,17 +214,20 @@ export default function Inicio() {
                 <MovieCard
                   key={filme.id}
                   id={filme.id}
-                 titulo={tipoConteudo === "tv" ? filme.name : filme.title}
+                  titulo={filme.titulo}
                   subtitulo={
-                      tipoConteudo === "tv"
-                        ? filme.first_air_date?.slice(0,4)
-                        : filme.release_date?.slice(0,4)
-                          }
-                  poster={
-                    filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null
+                    filme.dataLancamento
+                      ? filme.dataLancamento.slice(0, 4)
+                      : ""
                   }
+                  poster={
+                    filme.poster_path
+                      ? `${IMG_BASE}${filme.poster_path}`
+                      : null
+                  }
+                  genre_ids={filme.genre_ids}
                   mostrarBotaoAdd={true}
-                   tipo={tipoConteudo}  
+                  tipo={tipoConteudo}
                 />
               ))}
             </div>
@@ -227,30 +252,6 @@ export default function Inicio() {
           </div>
         </section>
 
-        {/* SÉRIES */}
-        <section className={styles.contentSection}>
-          <div className={styles.sectionHeader}>
-            <h3>Séries em Andamento</h3>
-
-            <a href="#" className={styles.linkCyan}>
-              Ver tudo
-            </a>
-          </div>
-
-          <div className={styles.seriesGrid}>
-            {seriesEmAndamento.map((serie) => (
-              <SeriesCard
-                key={serie.id}
-                titulo={serie.titulo}
-                subtitulo={serie.subtitulo}
-                textoBotao={serie.textoBotao}
-                finalizado={serie.finalizado}
-                iconeAssistido={iconeAssistidos}
-              />
-            ))}
-          </div>
-        </section>
-
         {/* POPULARES */}
         <section className={styles.contentSection}>
           <div className={styles.sectionHeader}>
@@ -264,20 +265,19 @@ export default function Inicio() {
           <div className={styles.moviesGrid}>
             {filmesPopulares.map((filme) => (
               <MovieCard
-                  key={filme.id}
-                  id={filme.id}
-                 titulo={tipoConteudo === "tv" ? filme.name : filme.title}
-                  subtitulo={
-                      tipoConteudo === "tv"
-                        ? filme.first_air_date?.slice(0,4)
-                        : filme.release_date?.slice(0,4)
-                          }
-                  poster={
-                    filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null
-                  }
-                  mostrarBotaoAdd={true}
-                   tipo={tipoConteudo}  
-                />
+                key={filme.id}
+                id={filme.id}
+                titulo={filme.titulo}
+                subtitulo={
+                  filme.dataLancamento ? filme.dataLancamento.slice(0, 4) : ""
+                }
+                poster={
+                  filme.poster_path ? `${IMG_BASE}${filme.poster_path}` : null
+                }
+                genre_ids={filme.genre_ids}
+                mostrarBotaoAdd={true}
+                tipo={tipoConteudo}
+              />
             ))}
           </div>
         </section>
